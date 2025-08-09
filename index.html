@@ -3,119 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alexey AI — Новости ИИ</title>
+    <title>Alexey AI — Портфолио</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #0f1116;
-            color: #f5f5f5;
             margin: 0;
-            padding: 0;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
         }
         header {
-            background: #1a1c23;
-            padding: 20px;
+            background: linear-gradient(90deg, #2b5876, #4e4376);
+            color: white;
+            padding: 30px 20px;
             text-align: center;
-            font-size: 1.5em;
-            font-weight: bold;
-            color: #00ffae;
         }
-        main {
-            padding: 20px;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
+        header img {
+            width: 150px;
+            border-radius: 50%;
+            margin-top: 15px;
         }
-        .news-card {
-            background: #1c1e26;
-            border-radius: 10px;
-            padding: 15px;
-            transition: 0.3s;
+        h1 {
+            margin: 10px 0;
+            font-size: 2.2em;
+        }
+        h2 {
+            text-align: center;
+            margin: 30px 0 15px;
+            font-size: 1.8em;
+            color: #4e4376;
+        }
+        .portfolio {
             display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
         }
-        .news-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0,255,174,0.3);
-        }
-        .news-card h3 {
-            color: #00ffae;
-            margin: 0 0 10px 0;
+        .portfolio button {
+            background: #4e4376;
+            color: white;
+            padding: 15px 25px;
             font-size: 1.2em;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
         }
-        .news-card p {
-            font-size: 0.95em;
-            color: #d1d1d1;
-            flex-grow: 1;
+        .portfolio button:hover {
+            background: #2b5876;
         }
-        .news-card a {
+        .news-section {
+            padding: 20px;
+            background: white;
+            max-width: 800px;
+            margin: auto;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .news-item {
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+        }
+        .news-item:last-child {
+            border-bottom: none;
+        }
+        .news-item a {
+            color: #2b5876;
             text-decoration: none;
-            background: #00ffae;
-            color: #0f1116;
-            padding: 8px 12px;
-            border-radius: 6px;
             font-weight: bold;
-            text-align: center;
-            margin-top: 10px;
-            transition: background 0.3s;
         }
-        .news-card a:hover {
-            background: #00e6a0;
+        .news-item a:hover {
+            text-decoration: underline;
+        }
+        footer {
+            background: #2b5876;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            margin-top: 40px;
         }
     </style>
 </head>
 <body>
 
-<header>Новости искусственного интеллекта</header>
+<header>
+    <h1>Alexey AI</h1>
+    <p>Инженер нейросетей | Создание фото, видео и ботов</p>
+    <img src="man-glasses.jpg" alt="Мужчина в очках">
+</header>
 
-<main id="news-container">
-    <p>Загрузка новостей...</p>
-</main>
+<section>
+    <h2>Портфолио</h2>
+    <div class="portfolio">
+        <button onclick="location.href='portfolio-photo.html'">Фото</button>
+        <button onclick="location.href='portfolio-video.html'">Видео</button>
+        <button onclick="location.href='portfolio-bots.html'">Боты</button>
+    </div>
+</section>
+
+<section>
+    <h2>Новости ИИ</h2>
+    <div id="news-container" class="news-section">
+        <p>Загрузка новостей...</p>
+    </div>
+</section>
+
+<footer>
+    &copy; 2025 Alexey AI. Все права защищены.
+</footer>
 
 <script>
     async function loadNews() {
-        const container = document.getElementById('news-container');
-        container.innerHTML = "<p>Загрузка новостей...</p>";
-
+        const newsContainer = document.getElementById('news-container');
         try {
-            // Запрос свежих новостей об ИИ с NewsAPI
-            const apiKey = "demo"; // ⚠️ Заменить на реальный API ключ NewsAPI.org
-            const url = `https://newsapi.org/v2/everything?q=artificial%20intelligence&language=ru&sortBy=publishedAt&pageSize=8&apiKey=${apiKey}`;
-            const response = await fetch(url);
-            const data = await response.json();
-
-            if (!data.articles) {
-                container.innerHTML = "<p>Не удалось загрузить новости.</p>";
-                return;
-            }
-
-            container.innerHTML = "";
+            const res = await fetch("https://newsapi.org/v2/everything?q=artificial%20intelligence&language=ru&sortBy=publishedAt&pageSize=5&apiKey=YOUR_API_KEY");
+            const data = await res.json();
+            newsContainer.innerHTML = "";
             data.articles.forEach(article => {
-                const card = document.createElement("div");
-                card.className = "news-card";
-
-                const title = document.createElement("h3");
-                title.textContent = article.title;
-
-                const description = document.createElement("p");
-                description.textContent = article.description || "Описание отсутствует.";
-
-                const link = document.createElement("a");
-                link.href = article.url;
-                link.target = "_blank";
-                link.textContent = "Читать далее";
-
-                card.appendChild(title);
-                card.appendChild(description);
-                card.appendChild(link);
-
-                container.appendChild(card);
+                const item = document.createElement("div");
+                item.classList.add("news-item");
+                item.innerHTML = `<a href="${article.url}" target="_blank">${article.title}</a><p>${article.description || ""}</p>`;
+                newsContainer.appendChild(item);
             });
-
-        } catch (error) {
-            container.innerHTML = "<p>Ошибка загрузки новостей.</p>";
-            console.error(error);
+        } catch (err) {
+            newsContainer.innerHTML = "<p>Не удалось загрузить новости. Попробуйте позже.</p>";
         }
     }
 

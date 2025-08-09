@@ -5,61 +5,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Botmaker — Инженер ИИ</title>
   <link rel="stylesheet" href="style.css" />
-
   <style>
-.news-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 20px;
-  padding: 20px 0;
-}
-.news-card {
-  background: white;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  display: flex;
-  flex-direction: column;
-}
-.news-card img {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-}
-.news-content {
-  padding: 15px;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-.news-date {
-  font-size: 0.9em;
-  color: #666;
-  margin-bottom: 5px;
-}
-.news-title {
-  font-size: 1.2em;
-  font-weight: bold;
-  margin-bottom: 10px;
-}
-.news-description {
-  flex: 1;
-  font-size: 1em;
-  color: #333;
-  margin-bottom: 10px;
-}
-.read-more {
-  text-decoration: none;
-  color: white;
-  background: #0078ff;
-  padding: 8px 12px;
-  border-radius: 5px;
-  text-align: center;
-  transition: background 0.2s ease;
-}
-.read-more:hover {
-  background: #005bcc;
-}
+    .news-section {
+      padding: 20px;
+      max-width: 900px;
+      margin: auto;
+    }
+    .news-card {
+      background: #f4f4f4;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+    }
+    .news-card h3 {
+      margin: 0 0 8px;
+    }
+    .news-card a {
+      color: #0066cc;
+      text-decoration: none;
+    }
+    .news-card a:hover {
+      text-decoration: underline;
+    }
+    .news-date {
+      font-size: 0.85em;
+      color: #777;
+    }
   </style>
 </head>
 <body>
@@ -67,7 +38,6 @@
     <h1>Botmaker</h1>
     <p>Инженер по нейросетям. Создаю чат-ботов, сайты, изображения и видео с помощью ИИ.</p>
   </header>
-
   <section class="portfolio">
     <h2>Портфолио</h2>
     <div class="portfolio-links">
@@ -77,27 +47,45 @@
     </div>
   </section>
 
-  <!-- Новый раздел Новости -->
-  <section class="news">
-    <h2>Новости и обновления</h2>
-    <div id="news-container" class="news-container">
-      Загрузка новостей...
-    </div>
+  <!-- Новости -->
+  <section class="news-section">
+    <h2>Новости ИИ</h2>
+    <div id="news-container"></div>
   </section>
 
   <script>
-async function loadNews() {
-    try {
-        const res = await fetch('news.json');
-        const data = await res.json();
-        const container = document.getElementById('news-container');
-        container.innerHTML = '';
+    const newsData = [
+      {
+        title: "Нейросеть создала фотореалистичный видеоролик за 10 секунд",
+        link: "https://example.com/news1",
+        date: "2025-08-09",
+        description: "Новая модель Zeroscope показала впечатляющий результат генерации видео."
+      },
+      {
+        title: "Meta представила улучшенную версию MusicGen",
+        link: "https://example.com/news2",
+        date: "2025-08-08",
+        description: "Генерация музыки теперь стала в два раза быстрее и качественнее."
+      },
+      {
+        title: "ChatGPT научился генерировать 3D-модели",
+        link: "https://example.com/news3",
+        date: "2025-08-07",
+        description: "OpenAI представила экспериментальную функцию для создания 3D-объектов."
+      }
+    ];
 
-        data.articles.sort((a, b) => new Date(b.published_at) - new Date(a.published_at));
-
-        data.articles.forEach(item => {
-            const card = document.createElement('div');
-            card.className = 'news-card';
-            card.innerHTML = `
-                <img src="${item.image}" alt="${item.title}">
-                <div class
+    const newsContainer = document.getElementById("news-container");
+    newsData.forEach(news => {
+      const card = document.createElement("div");
+      card.className = "news-card";
+      card.innerHTML = `
+        <h3><a href="${news.link}" target="_blank">${news.title}</a></h3>
+        <div class="news-date">${new Date(news.date).toLocaleDateString()}</div>
+        <p>${news.description}</p>
+      `;
+      newsContainer.appendChild(card);
+    });
+  </script>
+</body>
+</html>

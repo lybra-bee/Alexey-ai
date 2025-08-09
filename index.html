@@ -8,28 +8,46 @@
   <style>
     .news-section {
       padding: 20px;
-      max-width: 900px;
-      margin: auto;
+      background: #f5f5f5;
+      margin-bottom: 20px;
+      border-radius: 10px;
     }
-    .news-card {
-      background: #f4f4f4;
-      padding: 15px;
-      margin-bottom: 15px;
-      border-radius: 8px;
+    .news-item {
+      cursor: pointer;
+      margin: 10px 0;
+      font-weight: bold;
+      color: #0077cc;
     }
-    .news-card h3 {
-      margin: 0 0 8px;
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.7);
+      justify-content: center;
+      align-items: center;
     }
-    .news-card a {
-      color: #0066cc;
-      text-decoration: none;
+    .modal-content {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 600px;
+      width: 90%;
     }
-    .news-card a:hover {
-      text-decoration: underline;
+    .modal-content img {
+      max-width: 100%;
+      border-radius: 10px;
+      margin-top: 10px;
     }
-    .news-date {
-      font-size: 0.85em;
-      color: #777;
+    .close-btn {
+      float: right;
+      cursor: pointer;
+      font-size: 20px;
+      font-weight: bold;
+      color: red;
     }
   </style>
 </head>
@@ -38,6 +56,12 @@
     <h1>Botmaker</h1>
     <p>Инженер по нейросетям. Создаю чат-ботов, сайты, изображения и видео с помощью ИИ.</p>
   </header>
+
+  <section class="news-section">
+    <h2>Новости ИИ</h2>
+    <div id="news-list"></div>
+  </section>
+
   <section class="portfolio">
     <h2>Портфолио</h2>
     <div class="portfolio-links">
@@ -47,45 +71,69 @@
     </div>
   </section>
 
-  <!-- Новости -->
-  <section class="news-section">
-    <h2>Новости ИИ</h2>
-    <div id="news-container"></div>
-  </section>
+  <!-- Модальное окно -->
+  <div id="news-modal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" id="close-modal">&times;</span>
+      <h3 id="modal-title"></h3>
+      <p id="modal-text"></p>
+      <img id="modal-image" src="" alt="Новостное изображение"/>
+    </div>
+  </div>
 
   <script>
+    // Пример имитации данных от нейросети
     const newsData = [
       {
-        title: "Нейросеть создала фотореалистичный видеоролик за 10 секунд",
-        link: "https://example.com/news1",
-        date: "2025-08-09",
-        description: "Новая модель Zeroscope показала впечатляющий результат генерации видео."
+        title: "ИИ создал первый фильм без участия человека",
+        text: "Команда исследователей разработала систему, которая самостоятельно написала сценарий, сняла и смонтировала фильм...",
+        image: "https://via.placeholder.com/500x300?text=ИИ+Фильм"
       },
       {
-        title: "Meta представила улучшенную версию MusicGen",
-        link: "https://example.com/news2",
-        date: "2025-08-08",
-        description: "Генерация музыки теперь стала в два раза быстрее и качественнее."
+        title: "Нейросети начинают прогнозировать погоду лучше синоптиков",
+        text: "Новая модель от ведущей лаборатории машинного обучения смогла предсказать шторм за 10 дней до его начала...",
+        image: "https://via.placeholder.com/500x300?text=ИИ+Погода"
       },
       {
-        title: "ChatGPT научился генерировать 3D-модели",
-        link: "https://example.com/news3",
-        date: "2025-08-07",
-        description: "OpenAI представила экспериментальную функцию для создания 3D-объектов."
+        title: "ИИ-художник продал картину за рекордные $1.2 млн",
+        text: "Алгоритм генерации изображений создал произведение, которое стало хитом аукциона Sotheby’s...",
+        image: "https://via.placeholder.com/500x300?text=ИИ+Искусство"
+      },
+      {
+        title: "Нейросети помогают в лечении редких болезней",
+        text: "ИИ-алгоритмы ускоряют диагностику и подбор терапии, что значительно повышает шансы на выздоровление...",
+        image: "https://via.placeholder.com/500x300?text=ИИ+Медицина"
+      },
+      {
+        title: "ИИ-переводчики стали понимать юмор",
+        text: "Разработчики представили модель, способную адаптировать шутки при переводе, сохраняя комический эффект...",
+        image: "https://via.placeholder.com/500x300?text=ИИ+Перевод"
       }
     ];
 
-    const newsContainer = document.getElementById("news-container");
-    newsData.forEach(news => {
-      const card = document.createElement("div");
-      card.className = "news-card";
-      card.innerHTML = `
-        <h3><a href="${news.link}" target="_blank">${news.title}</a></h3>
-        <div class="news-date">${new Date(news.date).toLocaleDateString()}</div>
-        <p>${news.description}</p>
-      `;
-      newsContainer.appendChild(card);
+    const newsList = document.getElementById("news-list");
+    const modal = document.getElementById("news-modal");
+    const closeModal = document.getElementById("close-modal");
+    const modalTitle = document.getElementById("modal-title");
+    const modalText = document.getElementById("modal-text");
+    const modalImage = document.getElementById("modal-image");
+
+    // Вывод заголовков
+    newsData.forEach((news, index) => {
+      const div = document.createElement("div");
+      div.className = "news-item";
+      div.textContent = news.title;
+      div.onclick = () => {
+        modalTitle.textContent = news.title;
+        modalText.textContent = news.text;
+        modalImage.src = news.image;
+        modal.style.display = "flex";
+      };
+      newsList.appendChild(div);
     });
+
+    closeModal.onclick = () => modal.style.display = "none";
+    window.onclick = (e) => { if (e.target == modal) modal.style.display = "none"; };
   </script>
 </body>
 </html>

@@ -1,121 +1,103 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Новости — AI Engineer</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            background-color: #f4f4f4;
-        }
-        header {
-            background-color: #111;
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
-        h1 {
-            margin: 0;
-        }
-        .news-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 20px;
-            padding: 20px;
-        }
-        .news-card {
-            background: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-            display: flex;
-            flex-direction: column;
-        }
-        .news-card img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
-        .news-content {
-            padding: 15px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-        .news-date {
-            font-size: 0.9em;
-            color: #666;
-            margin-bottom: 5px;
-        }
-        .news-title {
-            font-size: 1.2em;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-        .news-description {
-            flex: 1;
-            font-size: 1em;
-            color: #333;
-            margin-bottom: 10px;
-        }
-        .read-more {
-            text-decoration: none;
-            color: white;
-            background: #0078ff;
-            padding: 8px 12px;
-            border-radius: 5px;
-            text-align: center;
-            transition: background 0.2s ease;
-        }
-        .read-more:hover {
-            background: #005bcc;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Botmaker — Инженер ИИ</title>
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+.news-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+  padding: 20px 0;
+}
+.news-card {
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+}
+.news-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+.news-content {
+  padding: 15px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.news-date {
+  font-size: 0.9em;
+  color: #666;
+  margin-bottom: 5px;
+}
+.news-title {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.news-description {
+  flex: 1;
+  font-size: 1em;
+  color: #333;
+  margin-bottom: 10px;
+}
+.read-more {
+  text-decoration: none;
+  color: white;
+  background: #0078ff;
+  padding: 8px 12px;
+  border-radius: 5px;
+  text-align: center;
+  transition: background 0.2s ease;
+}
+.read-more:hover {
+  background: #005bcc;
+}
+  </style>
 </head>
 <body>
-    <header>
-        <h1>Новости и обновления</h1>
-    </header>
+  <header>
+    <h1>Botmaker</h1>
+    <p>Инженер по нейросетям. Создаю чат-ботов, сайты, изображения и видео с помощью ИИ.</p>
+  </header>
 
-    <main>
-        <div class="news-container" id="news-container">
-            <p>Загрузка новостей...</p>
-        </div>
-    </main>
+  <section class="portfolio">
+    <h2>Портфолио</h2>
+    <div class="portfolio-links">
+      <a href="neurophoto.html">🖼️ Нейрофото</a>
+      <a href="neurovideo.html">🎞️ Нейровидео</a>
+      <a href="chatbots.html">🤖 Чатботы</a>
+    </div>
+  </section>
 
-    <script>
-        async function loadNews() {
-            try {
-                const res = await fetch('news.json');
-                const news = await res.json();
-                const container = document.getElementById('news-container');
-                container.innerHTML = '';
+  <!-- Новый раздел Новости -->
+  <section class="news">
+    <h2>Новости и обновления</h2>
+    <div id="news-container" class="news-container">
+      Загрузка новостей...
+    </div>
+  </section>
 
-                news.sort((a, b) => new Date(b.date) - new Date(a.date));
+  <script>
+async function loadNews() {
+    try {
+        const res = await fetch('news.json');
+        const data = await res.json();
+        const container = document.getElementById('news-container');
+        container.innerHTML = '';
 
-                news.forEach(item => {
-                    const card = document.createElement('div');
-                    card.className = 'news-card';
-                    card.innerHTML = `
-                        <img src="${item.image}" alt="${item.title}">
-                        <div class="news-content">
-                            <div class="news-date">${new Date(item.date).toLocaleDateString('ru-RU')}</div>
-                            <div class="news-title">${item.title}</div>
-                            <div class="news-description">${item.description}</div>
-                            <a class="read-more" href="${item.link}" target="_blank">Читать далее</a>
-                        </div>
-                    `;
-                    container.appendChild(card);
-                });
-            } catch (err) {
-                document.getElementById('news-container').innerHTML = '<p>Не удалось загрузить новости.</p>';
-                console.error(err);
-            }
-        }
+        data.articles.sort((a, b) => new Date(b.published_at) - new Date(a.published_at));
 
-        loadNews();
-    </script>
-</body>
-</html>
+        data.articles.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'news-card';
+            card.innerHTML = `
+                <img src="${item.image}" alt="${item.title}">
+                <div class

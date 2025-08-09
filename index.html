@@ -1,94 +1,91 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Alexey AI — Новости об искусственном интеллекте</title>
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #0f0f0f;
-        color: #f5f5f5;
-        margin: 0;
-        padding: 0;
-    }
-    header {
-        background: #111;
-        padding: 20px;
-        text-align: center;
-        font-size: 1.5em;
-        font-weight: bold;
-    }
-    .news-container {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 20px;
-        padding: 20px;
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Botmaker — Инженер ИИ</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .news-section {
+      padding: 20px;
+      max-width: 900px;
+      margin: auto;
     }
     .news-card {
-        background: #1a1a1a;
-        padding: 15px;
-        border-radius: 10px;
-        transition: transform 0.2s, background 0.2s;
+      background: #f4f4f4;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 8px;
     }
-    .news-card:hover {
-        transform: scale(1.02);
-        background: #222;
+    .news-card h3 {
+      margin: 0 0 8px;
     }
-    .news-card img {
-        width: 100%;
-        border-radius: 8px;
-        max-height: 200px;
-        object-fit: cover;
+    .news-card a {
+      color: #0066cc;
+      text-decoration: none;
     }
-    .news-title {
-        font-size: 1.1em;
-        margin: 10px 0;
-    }
-    .news-title a {
-        color: #4ea1ff;
-        text-decoration: none;
-    }
-    .news-title a:hover {
-        text-decoration: underline;
+    .news-card a:hover {
+      text-decoration: underline;
     }
     .news-date {
-        font-size: 0.8em;
-        color: #aaa;
+      font-size: 0.85em;
+      color: #777;
     }
-</style>
+  </style>
 </head>
 <body>
-<header>📰 Новости об искусственном интеллекте</header>
-<div class="news-container" id="news"></div>
+  <header>
+    <h1>Botmaker</h1>
+    <p>Инженер по нейросетям. Создаю чат-ботов, сайты, изображения и видео с помощью ИИ.</p>
+  </header>
+  <section class="portfolio">
+    <h2>Портфолио</h2>
+    <div class="portfolio-links">
+      <a href="neurophoto.html">🖼️ Нейрофото</a>
+      <a href="neurovideo.html">🎞️ Нейровидео</a>
+      <a href="chatbots.html">🤖 Чатботы</a>
+    </div>
+  </section>
 
-<script>
-    const newsContainer = document.getElementById("news");
-    const rssUrl = encodeURIComponent("https://news.google.com/rss/search?q=artificial+intelligence&hl=ru&gl=RU&ceid=RU:ru");
-    const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${rssUrl}`;
+  <!-- Новости -->
+  <section class="news-section">
+    <h2>Новости ИИ</h2>
+    <div id="news-container"></div>
+  </section>
 
-    fetch(apiUrl)
-        .then(res => res.json())
-        .then(data => {
-            if (data.items) {
-                data.items.forEach(item => {
-                    const card = document.createElement("div");
-                    card.className = "news-card";
-                    card.innerHTML = `
-                        ${item.enclosure && item.enclosure.link ? `<img src="${item.enclosure.link}" alt="news image">` : ""}
-                        <div class="news-title"><a href="${item.link}" target="_blank">${item.title}</a></div>
-                        <div class="news-date">${new Date(item.pubDate).toLocaleDateString()}</div>
-                    `;
-                    newsContainer.appendChild(card);
-                });
-            } else {
-                newsContainer.innerHTML = "<p>Не удалось загрузить новости.</p>";
-            }
-        })
-        .catch(err => {
-            console.error(err);
-            newsContainer.innerHTML = "<p>Ошибка загрузки новостей.</p>";
-        });
-</script>
+  <script>
+    const newsData = [
+      {
+        title: "Нейросеть создала фотореалистичный видеоролик за 10 секунд",
+        link: "https://example.com/news1",
+        date: "2025-08-09",
+        description: "Новая модель Zeroscope показала впечатляющий результат генерации видео."
+      },
+      {
+        title: "Meta представила улучшенную версию MusicGen",
+        link: "https://example.com/news2",
+        date: "2025-08-08",
+        description: "Генерация музыки теперь стала в два раза быстрее и качественнее."
+      },
+      {
+        title: "ChatGPT научился генерировать 3D-модели",
+        link: "https://example.com/news3",
+        date: "2025-08-07",
+        description: "OpenAI представила экспериментальную функцию для создания 3D-объектов."
+      }
+    ];
+
+    const newsContainer = document.getElementById("news-container");
+    newsData.forEach(news => {
+      const card = document.createElement("div");
+      card.className = "news-card";
+      card.innerHTML = `
+        <h3><a href="${news.link}" target="_blank">${news.title}</a></h3>
+        <div class="news-date">${new Date(news.date).toLocaleDateString()}</div>
+        <p>${news.description}</p>
+      `;
+      newsContainer.appendChild(card);
+    });
+  </script>
 </body>
 </html>

@@ -1,24 +1,126 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Botmaker — Инженер ИИ</title>
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alexey AI — Новости ИИ</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #0f1116;
+            color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background: #1a1c23;
+            padding: 20px;
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #00ffae;
+        }
+        main {
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .news-card {
+            background: #1c1e26;
+            border-radius: 10px;
+            padding: 15px;
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .news-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,255,174,0.3);
+        }
+        .news-card h3 {
+            color: #00ffae;
+            margin: 0 0 10px 0;
+            font-size: 1.2em;
+        }
+        .news-card p {
+            font-size: 0.95em;
+            color: #d1d1d1;
+            flex-grow: 1;
+        }
+        .news-card a {
+            text-decoration: none;
+            background: #00ffae;
+            color: #0f1116;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 10px;
+            transition: background 0.3s;
+        }
+        .news-card a:hover {
+            background: #00e6a0;
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <h1>Botmaker</h1>
-    <p>Инженер по нейросетям. Создаю чат-ботов, сайты, изображения и видео с помощью ИИ.</p>
-  </header>
-  <section class="portfolio">
-    <h2>Портфолио</h2>
-    <div class="portfolio-links">
-      <a href="neurophoto.html">🖼️ Нейрофото</a>
-      <a href="neurovideo.html">🎞️ Нейровидео</a>
-      <a href="chatbots.html">🤖 Чатботы</a>
-    </div>
-  </section>
+
+<header>Новости искусственного интеллекта</header>
+
+<main id="news-container">
+    <p>Загрузка новостей...</p>
+</main>
+
+<script>
+    async function loadNews() {
+        const container = document.getElementById('news-container');
+        container.innerHTML = "<p>Загрузка новостей...</p>";
+
+        try {
+            // Запрос свежих новостей об ИИ с NewsAPI
+            const apiKey = "demo"; // ⚠️ Заменить на реальный API ключ NewsAPI.org
+            const url = `https://newsapi.org/v2/everything?q=artificial%20intelligence&language=ru&sortBy=publishedAt&pageSize=8&apiKey=${apiKey}`;
+            const response = await fetch(url);
+            const data = await response.json();
+
+            if (!data.articles) {
+                container.innerHTML = "<p>Не удалось загрузить новости.</p>";
+                return;
+            }
+
+            container.innerHTML = "";
+            data.articles.forEach(article => {
+                const card = document.createElement("div");
+                card.className = "news-card";
+
+                const title = document.createElement("h3");
+                title.textContent = article.title;
+
+                const description = document.createElement("p");
+                description.textContent = article.description || "Описание отсутствует.";
+
+                const link = document.createElement("a");
+                link.href = article.url;
+                link.target = "_blank";
+                link.textContent = "Читать далее";
+
+                card.appendChild(title);
+                card.appendChild(description);
+                card.appendChild(link);
+
+                container.appendChild(card);
+            });
+
+        } catch (error) {
+            container.innerHTML = "<p>Ошибка загрузки новостей.</p>";
+            console.error(error);
+        }
+    }
+
+    loadNews();
+</script>
+
 </body>
 </html>
-

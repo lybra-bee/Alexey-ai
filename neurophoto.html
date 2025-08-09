@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Нейрофото — Botmaker</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Всплывающее окно */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.9);
+    }
+    .modal-content {
+      margin: 5% auto;
+      display: block;
+      max-width: 90%;
+      border: 4px solid #00ffff;
+      border-radius: 12px;
+    }
+    .close {
+      position: absolute;
+      top: 30px;
+      right: 50px;
+      color: #00ffff;
+      font-size: 36px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🖼️ Нейрофото</h1>
+  </header>
+
+  <div class="gallery">
+    <!-- Галерея миниатюр -->
+    <img src="IMG_20250805_191905.jpg" alt="Фото 1" onclick="openModal(this.src)">
+    <img src="IMG_20250805_194722_493.jpg" alt="Фото 2" onclick="openModal(this.src)">
+    <img src="IMG_20250805_195441_774.jpg" alt="Фото 3" onclick="openModal(this.src)">
+    <img src="IMG_20250805_195714_940.jpg" alt="Фото 4" onclick="openModal(this.src)">
+    <img src="IMG_20250805_195829_004.jpg" alt="Фото 5" onclick="openModal(this.src)">
+    <img src="IMG_20250805_200401_589.jpg" alt="Фото 6" onclick="openModal(this.src)">
+    <img src="IMG_20250806_100927_510.jpg" alt="Фото 7" onclick="openModal(this.src)">
+    <img src="IMG_20250806_115934_246.jpg" alt="Фото 8" onclick="openModal(this.src)">
+    <img src="IMG_20250806_120009_203.jpg" alt="Фото 9" onclick="openModal(this.src)">
+    <img src="IMG_20250806_120046_647.jpg" alt="Фото 10" onclick="openModal(this.src)">
+    <img src="IMG_20250806_120349_127.jpg" alt="Фото 11" onclick="openModal(this.src)">
+    <img src="IMG_20250806_120822_987.jpg" alt="Фото 12" onclick="openModal(this.src)">
+    <img src="IMG_20250806_121003_420.jpg" alt="Фото 13" onclick="openModal(this.src)">
+    <img src="IMG_20250806_121521_363.jpg" alt="Фото 14" onclick="openModal(this.src)">
+    <img src="IMG_20250806_121610_361.jpg" alt="Фото 15" onclick="openModal(this.src)">
+  </div>
+
+  <!-- Всплывающее окно -->
+  <div id="myModal" class="modal" onclick="closeModal()">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <img class="modal-content" id="modalImg">
+  </div>
+
+  <div class="portfolio-links">
+    <a href="index.html">← На главную</a>
+  </div>
+
+  <script>
+    function openModal(src) {
+      document.getElementById("myModal").style.display = "block";
+      document.getElementById("modalImg").src = src;
+    }
+    function closeModal() {
+      document.getElementById("myModal").style.display = "none";
+    }
+  </script>
+</body>
+</html>
+

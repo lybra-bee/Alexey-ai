@@ -1,35 +1,25 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Alexey AI — Нейроинженер</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f5f5f5; }
-    header { background: #222; color: white; padding: 20px; text-align: center; }
-    section { padding: 20px; }
-    h2 { border-bottom: 2px solid #ddd; padding-bottom: 5px; }
-    .news-item { background: white; margin: 10px 0; padding: 10px; cursor: pointer; border-radius: 6px; }
-    .news-item:hover { background: #f0f0f0; }
-    #news-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-                  background: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: center; }
-    #news-modal-content { background: white; padding: 20px; max-width: 600px; border-radius: 8px; }
-    #news-modal-close { float: right; font-size: 22px; cursor: pointer; }
-    img { max-width: 100%; border-radius: 6px; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alexey AI — Инженер нейросетей</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <!-- Шапка сайта -->
+    <header class="hero">
+        <div class="overlay"></div>
+        <div class="hero-content">
+            <img src="images/man-glasses.png" alt="Инженер нейросетей" class="hero-image">
+            <h1>Alexey AI</h1>
+            <p>Разработка чат-ботов, генерация изображений, видео и музыки с помощью нейросетей</p>
+        </div>
+    </header>
 
-<header>
-  <h1>Alexey AI — Нейроинженер</h1>
-</header>
-
-<section id="news-section">
-  <h2>Новости ИИ</h2>
-  <div id="news-container">Загрузка новостей...</div>
-</section>
-
-<!-- Модальное окно -->
-<div id="news-modal">
-  <div id="news-modal-content">
-    <span id="news-modal-close">&times;</span>
+    <!-- О себе -->
+    <section class="about">
+        <div class="container">
+            <h2>Обо мне</h2>
+            <p>Я инженер нейросетей с опытом создания AI-приложений под заказ. 
+            Разрабатываю системы

@@ -1,121 +1,35 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Botmaker — Инженер ИИ</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alexey AI — Нейроинженер</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      line-height: 1.6;
-      background-color: #fafafa;
-      color: #333;
-    }
-
-    header {
-      text-align: center;
-      padding: 20px;
-      background-color: #0077cc;
-      color: white;
-      margin-bottom: 20px;
-    }
-
-    .news-section {
-      padding: 20px;
-      background-color: #f5f5f5;
-      margin-bottom: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0,0,0,.1);
-    }
-
-    ul#news-list {
-      list-style-type: none;
-      padding-left: 0;
-    }
-
-    .news-item {
-      margin-bottom: 20px;
-      overflow-wrap: break-word;
-    }
-
-    .news-item h3 {
-      font-size: 1.2em;
-      margin-bottom: 5px;
-    }
-
-    .news-item p {
-      font-size: 0.9em;
-      line-height: 1.4;
-    }
-
-    .news-item img {
-      max-width: 100%;
-      height: auto;
-      margin-top: 10px;
-      border-radius: 5px;
-    }
-
-    .portfolio a {
-      display: inline-block;
-      margin-right: 10px;
-      padding: 10px 20px;
-      background-color: #0077cc;
-      color: white;
-      text-decoration: none;
-      border-radius: 5px;
-      transition: all 0.3s ease;
-    }
-
-    .portfolio a:hover {
-      background-color: #005ea3;
-    }
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f5f5f5; }
+    header { background: #222; color: white; padding: 20px; text-align: center; }
+    section { padding: 20px; }
+    h2 { border-bottom: 2px solid #ddd; padding-bottom: 5px; }
+    .news-item { background: white; margin: 10px 0; padding: 10px; cursor: pointer; border-radius: 6px; }
+    .news-item:hover { background: #f0f0f0; }
+    #news-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+                  background: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: center; }
+    #news-modal-content { background: white; padding: 20px; max-width: 600px; border-radius: 8px; }
+    #news-modal-close { float: right; font-size: 22px; cursor: pointer; }
+    img { max-width: 100%; border-radius: 6px; }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Botmaker</h1>
-    <p>Инженер по нейросетям. Создаю чат-ботов, сайты, изображения и видео с помощью ИИ.</p>
-  </header>
 
-  <section class="news-section">
-    <h2>Новости ИИ и высоких технологий</h2>
-    <ul id="news-list"></ul>
-  </section>
+<header>
+  <h1>Alexey AI — Нейроинженер</h1>
+</header>
 
-  <section class="portfolio">
-    <h2>Портфолио</h2>
-    <div class="portfolio-links">
-      <a href="neurophoto.html">🖼️ Нейрофото</a>
-      <a href="neurovideo.html">🎞️ Нейровидео</a>
-      <a href="chatbots.html">🤖 Чатботы</a>
-    </div>
-  </section>
+<section id="news-section">
+  <h2>Новости ИИ</h2>
+  <div id="news-container">Загрузка новостей...</div>
+</section>
 
-  <script>
-    async function fetchLatestNews() {
-      const response = await fetch('/latest-news')
-      const articles = await response.json()
-
-      const listEl = document.getElementById('news-list')
-      listEl.innerHTML = ''
-
-      articles.forEach(article => {
-        const li = document.createElement('li')
-        li.className = 'news-item'
-        li.innerHTML = `
-          <h3>${article.title}</h3>
-          <p>${article.content.slice(0, 150)}...</p>
-          <img src="${article.imageUrl}" alt="Иллюстрация к статье">
-        `
-        listEl.appendChild(li)
-      })
-    }
-
-    // При загрузке страницы автоматически подтягиваем свежие новости
-    window.onload = fetchLatestNews
-  </script>
-</body>
-</html>
-
+<!-- Модальное окно -->
+<div id="news-modal">
+  <div id="news-modal-content">
+    <span id="news-modal-close">&times;</span>

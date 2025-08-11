@@ -1,56 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Alexey AI - Нейроинженер</title>
-	<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <title>Генерация статей</title>
 </head>
 <body>
-	<header>
-		<div class="hero">
-			<img src="images/hero-man.png" alt="Нейроинженер" class="hero-img">
-			<div class="hero-text">
-				<h1>Alexey AI</h1>
-				<p>Разработка чат-ботов, генерация изображений, видео, музыки и текста с помощью нейросетей</p>
-			</div>
-		</div>
-	</header>
-
-	<section class="about">
-		<h2>Обо мне</h2>
-		<p>Я инженер нейросетей, создаю кастомные решения под задачи заказчика. 
-		   Работаю с FastAPI, Hugging Face, Telegram Bot API, Coqui TTS, MusicGen и Zeroscope. 
-		   Реализую интеграцию генерации фото, видео, музыки и озвучки в ботов и сайты.</p>
-	</section>
-
-	<section class="portfolio">
-		<h2>Портфолио</h2>
-		<div class="portfolio-grid">
-			<div class="portfolio-item">
-				<img src="images/project1.jpg" alt="Проект 1">
-				<h3>Telegram-бот для генерации видео</h3>
-			</div>
-			<div class="portfolio-item">
-				<img src="images/project2.jpg" alt="Проект 2">
-				<h3>Веб-сервис генерации изображений</h3>
-			</div>
-			<div class="portfolio-item">
-				<img src="images/project3.jpg" alt="Проект 3">
-				<h3>Музыкальный генератор AI</h3>
-			</div>
-		</div>
-	</section>
-
-	<section class="contacts">
-		<h2>Контакты</h2>
-		<p>Email: <a href="mailto:example@example.com">example@example.com</a></p>
-		<p>Telegram: <a href="https://t.me/Lybra777" target="_blank">@Lybra777</a></p>
-	</section>
-
-	<footer>
-		<p>© 2025 Alexey AI. Все права защищены.</p>
-	</footer>
+<h1>Генерация статей онлайн</h1>
+<input type="text" id="topicInput" placeholder="Введите тему статьи"/>
+<button onclick="generateArticle()">Создать статью</button>
+<div id="output"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    function generateArticle() {
+        var topic = document.getElementById("topicInput").value;
+        
+        $.ajax({
+            url: '/generate_article',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({topic: topic}),
+            success: function(response) {
+                $('#output').html('<h2>' + topic + '</h2><p>' + response.article + '</p>');
+            },
+            error: function(error) {
+                alert('Ошибка при генерации статьи');
+            }
+        });
+    }
+</script>
 </body>
 </html>
-

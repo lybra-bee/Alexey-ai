@@ -5,72 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Botmaker — Инженер ИИ</title>
   <link rel="stylesheet" href="style.css" />
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      line-height: 1.6;
-      background-color: #fafafa;
-      color: #333;
-    }
-
-    header {
-      text-align: center;
-      padding: 20px;
-      background-color: #0077cc;
-      color: white;
-      margin-bottom: 20px;
-    }
-
-    .news-section {
-      padding: 20px;
-      background-color: #f5f5f5;
-      margin-bottom: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0,0,0,.1);
-    }
-
-    ul#news-list {
-      list-style-type: none;
-      padding-left: 0;
-    }
-
-    .news-item {
-      margin-bottom: 20px;
-      overflow-wrap: break-word;
-    }
-
-    .news-item h3 {
-      font-size: 1.2em;
-      margin-bottom: 5px;
-    }
-
-    .news-item p {
-      font-size: 0.9em;
-      line-height: 1.4;
-    }
-
-    .news-item img {
-      max-width: 100%;
-      height: auto;
-      margin-top: 10px;
-      border-radius: 5px;
-    }
-
-    .portfolio a {
-      display: inline-block;
-      margin-right: 10px;
-      padding: 10px 20px;
-      background-color: #0077cc;
-      color: white;
-      text-decoration: none;
-      border-radius: 5px;
-      transition: all 0.3s ease;
-    }
-
-    .portfolio a:hover {
-      background-color: #005ea3;
-    }
-  </style>
 </head>
 <body>
   <header>
@@ -92,25 +26,10 @@
     </div>
   </section>
 
-<script>
-async function fetchLatestNews() {
-  const response = await fetch('news.json'); // Загружаем файл из репозитория
-  const articles = await response.json();
-  const listEl = document.getElementById('news-list');
-  listEl.innerHTML = '';
+  <script>
+    async function fetchLatestNews() {
+      const response = await fetch('news.json'); // Загружаем из репозитория
+      const articles = await response.json();
 
-  articles.forEach(article => {
-    const li = document.createElement('li');
-    li.className = 'news-item';
-    li.innerHTML = `
-      <h3>${article.title}</h3>
-      <p>${article.content.slice(0, 150)}...</p>
-      <img src="${article.imageUrl}" alt="Иллюстрация к статье">
-    `;
-    listEl.appendChild(li);
-  });
-}
-window.onload = fetchLatestNews;
-</script>
-</body>
-</html>
+      const listEl = document.getElementById('news-list');
+      listEl.inner

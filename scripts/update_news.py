@@ -1,55 +1,73 @@
-import feedparser
-import requests
+import os
 import json
-from googletrans import Translator
-from slugify import slugify
+import requests
+import feedparser
+from datetime import datetime
+from pathlib import Path
+import base64
 
-HF_API_KEY = "hf_ВАШ_ТОКЕН"  # можно оставить пустым, если не генерировать картинки
-IMG_MODEL = "stabilityai/stable-diffusion-2"
+# === НАСТРОЙКИ ===
+NEWS_JSON = "news.json"
+IMAGES_DIR = Path("images/news")
+HF_API_KEY = os.getenv("HF_API_KEY")  # ключ в GitHub Secrets
+NEWS_FEED = "https://news.google.com/rss/search?q=artificial+intelligence&hl=en&gl=US&ceid=US:en"
+ARTICLES_LIMIT = 5
 
-# RSS ленты зарубежных ИИ-новостей
-RSS_FEEDS = [
-    "https://venturebeat.com/category/ai/feed/",
-    "https://www.artificialintelligence-news.com/feed/",
-]
+IMAGES_DIR.mkdir(parents=True, exist_ok=True)
 
-translator = Translator()
-articles_data = []
+def fetch_foreign_news():
+    feed = feedparser.parse(NEWS_FEED)
+    return feed.entries[:ARTICLES_LIMIT]
 
-print("📡 Получаем новости...")
-for feed_url in RSS_FEEDS:
-    feed = feedparser.parse(feed_url)
-    for entry in feed.entries[:2]:  # берем по 2 новости с каждой ленты
-        title_en = entry.title
-        summary_en = entry.summary
+def translate_and_rewrite(text):
+    url = "https://api-inference.huggingface.co/models/facebook/blenderbot-400M-distill"
+    headers = {"Authorization": f"Bearer {HF_API_KEY}"} if HF_API_KEY else {}
+    payload = {"inputs": f"Переведи и перескажи по-русски: {text}"}
+    try:
+        resp = requests.post(url, headers=headers, json=payload, timeout=60)
+        data = resp.json()
+        if isinstance(data, list) and "generated_text" in data[0]:
+            return data[0]["generated_text"]
+    except Exception as e:
+        print("Ошибка перевода:", e)
+    return text  # если не получилось — вернём оригинал
 
-        # Перевод
-        title_ru = translator.translate(title_en, src="en", dest="ru").text
-        summary_ru = translator.translate(summary_en, src="en", dest="ru").text
+def generate_image(prompt, filename):
+    url = "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-2"
+    headers = {"Authorization": f"Bearer {HF_API_KEY}"} if HF_API_KEY else {}
+    try:
+        resp = requests.post(url, headers=headers, json={"inputs": prompt}, timeout=120)
+        if resp.status_code == 200:
+            with open(filename, "wb") as f:
+                f.write(resp.content)
+            return str(filename)
+        else:
+            print("Ошибка генерации картинки:", resp.text)
+    except Exception as e:
+        print("Ошибка запроса картинки:", e)
+    return None
 
-        # Генерация картинки (если есть ключ)
-        image_url = ""
-        if HF_API_KEY:
-            prompt = f"Futuristic AI concept, {title_en}"
-            resp = requests.post(
-                f"https://api-inference.huggingface.co/models/{IMG_MODEL}",
-                headers={"Authorization": f"Bearer {HF_API_KEY}"},
-                json={"inputs": prompt}
-            )
-            if resp.status_code == 200:
-                image_filename = f"news_{slugify(title_en)}.png"
-                with open(image_filename, "wb") as f:
-                    f.write(resp.content)
-                image_url = image_filename
+def main():
+    news_entries = fetch_foreign_news()
+    articles = []
 
-        articles_data.append({
-            "title": title_ru,
-            "content": summary_ru,
-            "imageUrl": image_url or "default.jpg"
+    for i, entry in enumerate(news_entries, start=1):
+        title = translate_and_rewrite(entry.title)
+        summary = translate_and_rewrite(entry.summary)
+        img_filename = IMAGES_DIR / f"news_{i}.png"
+        image_path = generate_image(title, img_filename)
+
+        articles.append({
+            "title": title,
+            "content": summary,
+            "imageUrl": image_path if image_path else "images/placeholder.png",
+            "date": datetime.utcnow().isoformat()
         })
 
-# Сохраняем в news.json
-with open("news.json", "w", encoding="utf-8") as f:
-    json.dump(articles_data, f, ensure_ascii=False, indent=2)
+    with open(NEWS_JSON, "w", encoding="utf-8") as f:
+        json.dump(articles, f, ensure_ascii=False, indent=2)
 
-print("✅ Новости обновлены!")
+    print(f"✅ Сохранено {len(articles)} статей")
+
+if __name__ == "__main__":
+    main()

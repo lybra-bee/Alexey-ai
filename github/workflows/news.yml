@@ -1,0 +1,28 @@
+name: Update News
+on:
+  schedule:
+    - cron: "0 */3 * * *"
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.10
+      - name: Install deps
+        run: pip install requests feedparser
+      - name: Run script
+        env:
+          HF_API_KEY: ${{ secrets.HF_API_KEY }}
+        run: python update_news.py
+      - name: Commit & Push
+        run: |
+          git config --global user.email "you@example.com"
+          git config --global user.name "GitHub Actions"
+          git add .
+          git commit -m "Обновление новостей" || echo "Нет изменений"
+          git push

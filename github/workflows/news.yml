@@ -1,28 +1,36 @@
-name: Update News
+name: Автогенерация новостей ИИ
+
 on:
   schedule:
-    - cron: "0 */3 * * *"
-  workflow_dispatch:
+    - cron: "0 */3 * * *"  # каждые 3 часа
+  workflow_dispatch:       # возможность ручного запуска
 
 jobs:
-  update:
+  update-news:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python
+      - name: Клонируем репозиторий
+        uses: actions/checkout@v3
+
+      - name: Устанавливаем Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.10
-      - name: Install deps
-        run: pip install requests feedparser
-      - name: Run script
+          python-version: "3.12"
+
+      - name: Устанавливаем зависимости
+        run: |
+          pip install requests googletrans==4.0.0-rc1 pillow
+
+      - name: Генерируем новости
+        run: python scripts/generate_news.py
         env:
           HF_API_KEY: ${{ secrets.HF_API_KEY }}
-        run: python update_news.py
-      - name: Commit & Push
+
+      - name: Коммитим изменения
         run: |
-          git config --global user.email "you@example.com"
-          git config --global user.name "GitHub Actions"
-          git add .
-          git commit -m "Обновление новостей" || echo "Нет изменений"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add news.json
+          git commit -m "Обновлены новости ИИ"
           git push

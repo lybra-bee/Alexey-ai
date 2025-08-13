@@ -1,27 +1,124 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Botmaker — Инженер ИИ</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        background-color: #121212;
+        color: #fff;
+        margin: 0;
+        padding: 0;
+    }
+    header {
+        text-align: center;
+        padding: 40px 20px;
+        background-color: #1e1e1e;
+    }
+    header img {
+        max-width: 180px;
+        border-radius: 50%;
+        margin-bottom: 20px;
+    }
+    header h1 {
+        margin: 0;
+        font-size: 2em;
+    }
+    header p {
+        font-size: 1.1em;
+        color: #ccc;
+    }
+    .news-section {
+        padding: 20px;
+        background-color: #1a1a1a;
+        margin-bottom: 20px;
+        border-radius: 10px;
+    }
+    .news-section h2 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    ul#news-list {
+        list-style: none;
+        padding: 0;
+    }
+    .news-item {
+        margin-bottom: 20px;
+        background: #222;
+        padding: 15px;
+        border-radius: 8px;
+    }
+    .news-item h3 {
+        margin-top: 0;
+    }
+    .news-item img {
+        max-width: 100%;
+        border-radius: 5px;
+        margin-top: 10px;
+    }
+    .portfolio {
+        padding: 20px;
+        text-align: center;
+    }
+    .portfolio h2 {
+        margin-bottom: 20px;
+    }
+    .portfolio-links a {
+        display: inline-block;
+        margin: 10px;
+        padding: 10px 20px;
+        background-color: #0077cc;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+    .portfolio-links a:hover {
+        background-color: #005ea3;
+    }
+</style>
+</head>
+<body>
+
+<header>
+    <img src="muzhchina.jpg" alt="Мужчина в очках">
+    <h1>Botmaker</h1>
+    <p>Инженер по нейросетям. Создаю чат-ботов, сайты, изображения и видео с помощью ИИ.</p>
+</header>
+
 <section class="news-section">
-  <h2>Новости ИИ и высоких технологий</h2>
-  <ul id="news-list"></ul>
+    <h2>Новости ИИ и технологий</h2>
+    <ul id="news-list"></ul>
+</section>
+
+<section class="portfolio">
+    <h2>Портфолио</h2>
+    <div class="portfolio-links">
+        <a href="neurophoto.html">🖼️ Нейрофото</a>
+        <a href="neurovideo.html">🎞️ Нейровидео</a>
+        <a href="chatbots.html">🤖 Чатботы</a>
+    </div>
 </section>
 
 <script>
 async function fetchLatestNews() {
-  const response = await fetch("https://raw.githubusercontent.com/Lybrabee/Alexey-ai/main/news.json");
-  const articles = await response.json();
+    try {
+        const response = await fetch('https://raw.githubusercontent.com/Lybrabee/Alexey-ai/main/news.json');
+        const articles = await response.json();
+        const listEl = document.getElementById('news-list');
+        listEl.innerHTML = '';
 
-  const listEl = document.getElementById("news-list");
-  listEl.innerHTML = "";
-
-  articles.forEach(article => {
-    const li = document.createElement("li");
-    li.className = "news-item";
-    li.innerHTML = `
-      <h3>${article.title}</h3>
-      <p>${article.content.slice(0, 150)}...</p>
-      <img src="https://raw.githubusercontent.com/Lybrabee/Alexey-ai/main/${article.imageUrl}" alt="Иллюстрация">
-    `;
-    listEl.appendChild(li);
-  });
-}
-
-window.onload = fetchLatestNews;
-</script>
+        articles.forEach(article => {
+            const li = document.createElement('li');
+            li.className = 'news-item';
+            li.innerHTML = `
+                <h3>${article.title}</h3>
+                <p>${article.content}</p>
+                ${article.imageUrl ? `<img src="${article.imageUrl}" alt="Иллюстрация">` : ''}
+            `;
+            listEl.appendChild(li);
+        });
+    } catch (error) {
+        console.error('Ошибка з

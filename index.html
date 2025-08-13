@@ -50,6 +50,17 @@
       padding-left: 0;
     }
 
+    .news-item {
+      margin-bottom: 20px;
+      cursor: pointer;
+    }
+
+    .news-item img {
+      max-width: 100%;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+
     .portfolio {
       padding: 20px;
       text-align: center;
@@ -75,11 +86,44 @@
       transform: translateY(-3px);
       box-shadow: 6px 6px 12px rgba(0,0,0,0.5), -6px -6px 12px rgba(255,255,255,0.1);
     }
+
+    /* Модальное окно */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.7);
+      overflow: auto;
+    }
+
+    .modal-content {
+      background-color: #1b2836;
+      margin: 10% auto;
+      padding: 20px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 700px;
+      color: white;
+    }
+
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 24px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .close:hover {
+      color: white;
+    }
   </style>
 </head>
 <body>
   <header>
-    <img src="IMG_20250805_191905.jpg" alt="Мужчина в очках">
+    <img src="muzhchina.jpg" alt="Мужчина в очках">
     <h1>Botmaker</h1>
     <p>Инженер по нейросетям. Создаю чат-ботов, сайты, изображения и видео с помощью ИИ.</p>
   </header>
@@ -100,6 +144,16 @@
     </div>
   </section>
 
+  <!-- Модальное окно -->
+  <div id="newsModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h3 id="modalTitle"></h3>
+      <img id="modalImage" src="" alt="" style="max-width:100%; margin-top:10px; border-radius:5px;">
+      <p id="modalContent" style="margin-top:15px;"></p>
+    </div>
+  </div>
+
   <script>
     async function fetchLatestNews() {
       try {
@@ -110,8 +164,10 @@
         const listEl = document.getElementById('news-list');
         listEl.innerHTML = '';
 
-        articles.forEach(article => {
+        articles.forEach((article, index) => {
           const li = document.createElement('li');
+          li.classList.add('news-item');
+          li.dataset.index = index;
           li.innerHTML = `
             <h3>${article.title}</h3>
             <p>${article.content.slice(0, 150)}...</p>
@@ -119,8 +175,33 @@
           `;
           listEl.appendChild(li);
         });
+
+        // Вешаем обработчики кликов
+        document.querySelectorAll('.news-item').forEach(item => {
+          item.addEventListener('click', () => {
+            const i = item.dataset.index;
+            openModal(articles[i]);
+          });
+        });
       } catch (error) {
         console.error(error);
+      }
+    }
+
+    function openModal(article) {
+      document.getElementById('modalTitle').textContent = article.title;
+      document.getElementById('modalImage').src = article.imageUrl;
+      document.getElementById('modalContent').textContent = article.content;
+      document.getElementById('newsModal').style.display = 'block';
+    }
+
+    document.querySelector('.close').onclick = function() {
+      document.getElementById('newsModal').style.display = 'none';
+    }
+
+    window.onclick = function(event) {
+      if (event.target === document.getElementById('newsModal')) {
+        document.getElementById('newsModal').style.display = 'none';
       }
     }
 

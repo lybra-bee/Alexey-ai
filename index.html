@@ -121,4 +121,11 @@ async function fetchLatestNews() {
             listEl.appendChild(li);
         });
     } catch (error) {
-        console.error('Ошибка з
+        console.error('Ошибка загрузки новостей:', error);
+    }
+}
+window.onload = fetchLatestNews;
+</script>
+
+</body>
+</html>
